@@ -62,6 +62,7 @@ LOCAL_MODULE:= libandroidfw
 LOCAL_MODULE_TAGS := optional
 LOCAL_SRC_FILES:= $(deviceSources)
 LOCAL_C_INCLUDES := \
+    bionic/libc/include \
     external/zlib \
     system/core/include
 LOCAL_STATIC_LIBRARIES := libziparchive libbase
