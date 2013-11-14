@@ -985,7 +985,7 @@
     <!-- Screen pinning dialog title. -->
     <string name="screen_pinning_title">Screen is pinned</string>
     <!-- Screen pinning dialog description. -->
-    <string name="screen_pinning_description">This keeps it in view until you unpin. Touch and hold Back and Overview at the same time to unpin.</string>
+    <string name="screen_pinning_description">This keeps it in view until you unpin. Touch and hold the two 3-dot menu buttons at the same time to unpin.</string>
     <!-- Screen pinning dialog description when in accessibility mode. -->
     <string name="screen_pinning_description_accessible">This keeps it in view until you unpin. Touch and hold Overview to unpin.</string>
     <!-- Screen pinning positive response. -->
@@ -1139,4 +1139,12 @@
     <!-- Bluetooth enablement ok text [CHAR LIMIT=40] -->
     <string name="enable_bluetooth_confirmation_ok">Turn on</string>
 
+    <!-- Kill app toast -->
+    <string name="app_killed_message">App Killed</string>
+
+    <!-- Screenshot -->
+    <string name="shortcut_screenshot">Screenshot</string>
+
+    <!-- Battery level for expanded quick settings [CHAR LIMIT=2] -->
+    <string name="battery_level_template"><xliff:g id="level" example="45">%d</xliff:g>%%</string>
 </resources>
