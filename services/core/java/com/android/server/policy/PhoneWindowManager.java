@@ -683,6 +683,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int MSG_POWER_LONG_PRESS = 14;
     private static final int MSG_UPDATE_DREAMING_SLEEP_TOKEN = 15;
     private static final int MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK = 16;
+    private boolean mClearedBecauseOfForceShow;
+    private boolean mTopWindowIsKeyguard;
 
     boolean mWifiDisplayConnected = false;
     int mWifiDisplayCustomRotation = -1;
@@ -4173,7 +4175,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
-    private void applyStableConstraints(int sysui, int fl, Rect r) {
+    private void applyStableConstraints(int sysui, int fl, Rect r, Rect d) {
+        if (mNavigationBarLeftInLandscape) {
+            d.left = r.left;
+            r.left = 0;
+        }
         if ((sysui & View.SYSTEM_UI_FLAG_LAYOUT_STABLE) != 0) {
             // If app is requesting a stable layout, don't let the
             // content insets go below the stable values.
