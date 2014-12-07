@@ -1252,6 +1252,7 @@ public interface WindowManagerPolicy {
      */
     public boolean needsNavigationBar();
 
+
     /**
      * Lock the device now.
      */
