@@ -659,6 +659,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             return true;
         }
         return false;
+        mQSPanel.vibrateTile(20);
     }
 
     @Override
