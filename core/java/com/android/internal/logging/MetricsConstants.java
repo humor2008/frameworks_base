@@ -265,6 +265,7 @@ public interface MetricsConstants {
 
     // Validus 
     public static final int THE_VOID = 239;
+    public static final int QS_LOCATION_DETAILS = 240;
 
     // These constants must match those in the analytic pipeline, do not edit.
     // Add temporary values to the top of MetricsLogger instead.
