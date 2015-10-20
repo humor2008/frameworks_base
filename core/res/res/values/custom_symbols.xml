@@ -17,6 +17,8 @@
 -->
 <resources>
 
+  <java-symbol type="color" name="darkkat_blue_grey" />
+
   <!-- Reboot - Advanced Reboot -->
   <java-symbol type="string" name="reboot_confirm" />
   <java-symbol type="string" name="reboot_title" />
