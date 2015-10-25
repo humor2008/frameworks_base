@@ -4437,6 +4437,241 @@ public final class Settings {
         public static final String STATUS_BAR_VALIDUS_LOGO_COLOR = "status_bar_validus_logo_color";
 
         /**
+         * Statusbar Custom logos
+         * @hide
+         */
+        public static final String SHOW_CUSTOM_LOGO = "show_custom_logo";
+
+	/**
+         * Statusbar Custom logos Color
+         * @hide
+         */
+
+	public static final String CUSTOM_LOGO_COLOR = "custom_logo_color";
+
+ 	 /**
+         * Take your Pick 
+         * @hide
+         */
+        public static final String CUSTOM_LOGO_STYLE = "custom_logo_style";
+
+        /**
+         * Config for advanced pa pie 2.0
+         *
+         * @hide
+         */
+        public static final String PA_PIE_CONFIG = "pa_pie_config";
+
+       /**
+        * PA Pie control panel. Meet him on the spot.
+        * 0 = off
+        * 1 = on
+        * Changes aspect depends on status bar visibility.
+        * @hide
+        */
+        public static final String PA_PIE_STATE = "pa_pie_state";
+
+        /**
+         * Pie size fraction, default is 1.0f (normal)
+         * @hide
+         */
+        public static final String PA_PIE_SIZE = "pa_pie_size";
+
+        /**
+         * Locations of the Pa Pie in the screen.
+         * (1<<0) = LEFT
+         * (1<<1) = BOTTOM
+         * (1<<2) = RIGHT
+         * (1<<3) = TOP
+         * Default: LEFT
+         * @hide
+         */
+        public static final String PA_PIE_GRAVITY = "pa_pie_gravity";
+
+        /**
+         * Pie gap angle, should default to 2
+         * @hide
+         */
+        public static final String PA_PIE_GAP = "pa_pie_gap";
+
+        /**
+         * Pie empty angle, should default to 12
+         * @hide
+         */
+        public static final String PA_PIE_ANGLE = "pa_pie_angle";
+
+        /**
+         * Whether to use a separate delay for "slide to unlock" and security
+         * lock
+         * Pie status report
+         * 0 = Bare
+         * 1 = Quick
+         * 2 = Default
+         * 3 = Slow
+         * @hide
+         */
+        public static final String PA_PIE_MODE = "pa_pie_mode";
+
+        /**
+         * PA Pie menu, should default to 1 (yes, show)
+         * @hide
+         */
+        public static final String PA_PIE_MENU = "pa_pie_menu";
+
+        /**
+         * PA Pie last app, should default to 0 (no, show only when needed)
+         * @hide
+         */
+        public static final String PA_PIE_LAST_APP = "pa_pie_last_app";
+
+        /**
+         * PA Pie kill task, default to 0 (off)
+         * @hide
+         */
+        public static final String PA_PIE_KILL_TASK = "pa_pie_kill_task";
+
+        /**
+         * PA Pie action notifications, default to off
+         * @hide
+         */
+        public static final String PA_PIE_NOTIFICATIONS = "pa_pie_notifications";
+
+        /**
+         * Pie quick settings panel
+         * @hide
+         */
+        public static final String PA_PIE_SETTINGS_PANEL = "pa_pie_settings_panel";
+
+        /**
+         * PA Pie power, should default to 0 (no, show only when needed)
+         * @hide
+         */
+        public static final String PA_PIE_POWER = "pa_pie_power";
+
+        /**
+         * Pie screenshot
+         * @hide
+         */
+        public static final String PA_PIE_SCREENSHOT = "pa_pie_screenshot";
+
+        /**
+         * Pie toggles torch
+         * @hide
+         */
+        public static final String PA_PIE_TORCH = "pa_pie_torch";
+
+        /**
+         * Pie power menu
+         * @hide
+         */
+        public static final String PA_PIE_POWER_MENU = "pa_pie_power_menu";
+
+        /**
+         * Pie expanded desktop
+         * @hide
+         */
+        public static final String PA_PIE_EXPANDED_DESKTOP = "pa_pie_expanded_desktop";
+
+       // PIE COLORS EVERYWHERE! //
+
+        /**
+         * @hide
+         */
+        public static final String PA_PIE_ENABLE_COLOR = "pa_pie_enable_color";
+
+        /**
+         * @hide
+         */
+        public static final String PA_PIE_JUICE = "pa_pie_juice";
+
+        /**
+         * @hide
+         */
+        public static final String PA_PIE_BUTTON_COLOR = "pa_pie_button_color";
+
+        /**
+         * @hide
+         */
+        public static final String PA_PIE_SNAP_BACKGROUND = "pa_pie_snap_background";
+
+        /**
+         * @hide
+         */
+        public static final String PA_PIE_BACKGROUND = "pa_pie_background";
+
+        /**
+         * @hide
+         */
+        public static final String PA_PIE_SELECT = "pa_pie_select";
+
+        /**
+         * Network traffic activity
+         * 0: download
+         * 1: upload
+         * 2: download and upload
+         * 3: hidden
+         * default: 2
+         * @hide
+         */
+        public static final String STATUS_BAR_NETWORK_TRAFFIC_ACTIVITY = "status_bar_network_traffic_activity";
+
+        /**
+         * Network traffic type
+         * 0: text
+         * 1: icon
+         * 2: text and icon
+         * default: 2
+         * @hide
+         * @hide
+         */
+        public static final String STATUS_BAR_NETWORK_TRAFFIC_TYPE = "status_bar_network_traffic_type";
+
+        /**
+         * Display network traffic text value as bit/byte
+         * @hide
+         */
+        public static final String STATUS_BAR_NETWORK_TRAFFIC_BIT_BYTE = "status_bar_network_traffic_bit_byte";
+
+        /**
+         * Show/hide network traffic on no traffic
+         * @hide
+         */
+        public static final String STATUS_BAR_NETWORK_TRAFFIC_HIDE_TRAFFIC = "status_bar_network_traffic_hide_traffic";
+
+        /**
+         * Color of the network traffic text
+         * @hide
+         */
+        public static final String STATUS_BAR_NETWORK_TRAFFIC_TEXT_COLOR = "status_bar_network_traffic_text_color";
+
+        /**
+         * Color of the network traffic icons
+         * @hide
+         */
+        public static final String STATUS_BAR_NETWORK_TRAFFIC_ICON_COLOR = "status_bar_network_traffic_icon_color";
+
+        /**
+         * @hide
+         */
+        public static final String PA_PIE_OUTLINES = "pa_pie_outlines";
+
+        /**
+         * @hide
+         */
+        public static final String PA_PIE_STATUS_CLOCK = "pa_pie_status_clock";
+
+        /**
+         * @hide
+         */
+        public static final String PA_PIE_STATUS = "pa_pie_status";
+
+        /**
+         * @hide
+         */
+        public static final String PA_PIE_CHEVRON = "pa_pie_chevron";
+>>>>>>> 55784c2... Status bar: Network traffic, (1/2):
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
