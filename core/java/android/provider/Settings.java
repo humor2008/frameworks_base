@@ -4721,6 +4721,13 @@ public final class Settings {
         public static final String DOUBLE_TAP_SLEEP_GESTURE = "double_tap_sleep_gesture";
 
         /**
+        * Whether volume control media sound stream
+        * @hide
+        */
+        public static final String VOLUME_KEY_CONTROL_MEDIA =
+                "volume_key_control_media";
+
+         /**
          * Enable double tap gesture anywhere on the lock screen put device to sleep
          * @hide
          */
