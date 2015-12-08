@@ -413,4 +413,3 @@ public class DaylightHeaderProvider implements
                     .get(Calendar.DAY_OF_MONTH) == headerInfo.mDay;
     }
 }
-
