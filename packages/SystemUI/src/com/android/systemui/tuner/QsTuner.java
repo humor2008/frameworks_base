@@ -207,6 +207,8 @@ public class QsTuner extends Fragment implements Callback {
         else if (spec.equals("screenshot")) return R.string.quick_settings_screenshot_label;
         else if (spec.equals("headsup")) return R.string.quick_settings_heads_up_label;
         else if (spec.equals("sync")) return R.string.quick_settings_sync_label;
+        else if (spec.equals("battery_saver")) return R.string.quick_settings_battery_saver;
+>>>>>>> 83e2a79... Add Battery Saver QS Tile
         return 0;
     }
 
@@ -454,6 +456,7 @@ public class QsTuner extends Fragment implements Callback {
             else if (mSpec.equals("nfc")) return R.drawable.ic_qs_nfc_on;
             else if (mSpec.equals("headsup")) return R.drawable.ic_qs_heads_up_on;
             else if (mSpec.equals("sync")) return R.drawable.ic_qs_sync_on;
+            else if (mSpec.equals("battery_saver")) return R.drawable.ic_qs_battery_saver_on;
             return R.drawable.android;
         }
 
