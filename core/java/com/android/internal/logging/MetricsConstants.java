@@ -267,6 +267,7 @@ public interface MetricsConstants {
     public static final int THE_VOID = 239;
     public static final int QS_LOCATION_DETAILS = 240;
     public static final int QS_HEADSUP = 241;
+    public static final int QS_EXPANDED = 242;
 
     // Lock screen weather settings
     public static final int LOCKSCREEN_WEATHER_SETTINGS = 248;
