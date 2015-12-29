@@ -50,6 +50,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -340,6 +341,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     View mExpandedContents;
     //TextView mNotificationPanelDebugText;
 
+    // Validus logo
+    private boolean mValidusLogo;
+    private int mValidusLogoColor;
+    private ImageView validusLogo;
+
     // settings
     private QSPanel mQSPanel;
 
@@ -603,6 +609,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.RECENT_CARD_TEXT_COLOR), false, this,
                     UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_VALIDUS_LOGO),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_VALIDUS_LOGO_COLOR),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -1090,6 +1102,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         mIconController = new StatusBarIconController(
                 mContext, mStatusBarView, mKeyguardStatusBar, this);
+
+             ContentResolver resolver = mContext.getContentResolver();
+            mValidusLogo = Settings.System.getIntForUser(resolver,
+                    Settings.System.STATUS_BAR_VALIDUS_LOGO, 0, mCurrentUserId) == 1;
+            mValidusLogoColor = Settings.System.getIntForUser(resolver,
+                    Settings.System.STATUS_BAR_VALIDUS_LOGO_COLOR, 0xFFFFFFFF, mCurrentUserId);
+            showValidusLogo(mValidusLogo, mValidusLogoColor);
 
         // Background thread for any controllers that need it.
         mHandlerThread = new HandlerThread(TAG, Process.THREAD_PRIORITY_BACKGROUND);
@@ -3457,6 +3476,15 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     };
 
+    public void showValidusLogo(boolean show, int color) {
+        if (mStatusBarView == null) return;
+        validusLogo = (ImageView) mStatusBarView.findViewById(R.id.validus_logo);
+        validusLogo.setColorFilter(color, Mode.SRC_IN);
+        if (validusLogo != null) {
+            validusLogo.setVisibility(show ? (mValidusLogo ? View.VISIBLE : View.GONE) : View.GONE);
+        }
+    }
+
     private void resetUserExpandedStates() {
         ArrayList<Entry> activeNotifications = mNotificationData.getActiveNotifications();
         final int notificationCount = activeNotifications.size();
@@ -4970,3 +4998,4 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     }
 }
+
