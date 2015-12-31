@@ -345,6 +345,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private boolean mValidusLogo;
     private int mValidusLogoColor;
     private ImageView validusLogo;
+    private int mValidusLogoStyle;
 
     // settings
     private QSPanel mQSPanel;
@@ -615,6 +616,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_VALIDUS_LOGO_COLOR),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_VALIDUS_LOGO_STYLE),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -681,6 +685,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     || uri.equals(Settings.System.getUriFor(
                     Settings.System.RECENT_CARD_TEXT_COLOR))) {
                 rebuildRecentsScreen();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_VALIDUS_LOGO_STYLE))) {
+                recreateStatusBar();
+                updateRowStates();
+                updateSpeedbump();
+                updateClearAll();
+                updateEmptyShadeView();
             }
         }
          public void update() {
@@ -693,9 +704,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mValidusLogoColor = Settings.System.getIntForUser(resolver,
                     Settings.System.STATUS_BAR_VALIDUS_LOGO_COLOR, 0xFFFFFFFF, mCurrentUserId);
             if (mValidusLogoStyle == 0) {
-                ValidusLogo = (ImageView) mStatusBarView.findViewById(R.id.left_Validus_logo);
+                validusLogo = (ImageView) mStatusBarView.findViewById(R.id.left_Validus_logo);
             } else {
-                ValidusLogo = (ImageView) mStatusBarView.findViewById(R.id.Validus_logo);
+                validusLogo = (ImageView) mStatusBarView.findViewById(R.id.Validus_logo);
             }
             showValidusLogo(mValidusLogo, mValidusLogoColor, mValidusLogoStyle);
 
@@ -1120,13 +1131,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mIconController = new StatusBarIconController(
                 mContext, mStatusBarView, mKeyguardStatusBar, this);
 
-             ContentResolver resolver = mContext.getContentResolver();
-            mValidusLogo = Settings.System.getIntForUser(resolver,
-                    Settings.System.STATUS_BAR_VALIDUS_LOGO, 0, mCurrentUserId) == 1;
-            mValidusLogoColor = Settings.System.getIntForUser(resolver,
-                    Settings.System.STATUS_BAR_VALIDUS_LOGO_COLOR, 0xFFFFFFFF, mCurrentUserId);
-            showValidusLogo(mValidusLogo, mValidusLogoColor);
-
         // Background thread for any controllers that need it.
         mHandlerThread = new HandlerThread(TAG, Process.THREAD_PRIORITY_BACKGROUND);
         mHandlerThread.start();
@@ -1215,6 +1219,22 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     mHandler);
         }
         mWeatherController = new WeatherControllerImpl(mContext);
+
+             ContentResolver resolver = mContext.getContentResolver();
+        mValidusLogoStyle = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_VALIDUS_LOGO_STYLE, 0,
+                UserHandle.USER_CURRENT);
+        if (mValidusLogoStyle == 0) {
+            validusLogo = (ImageView) mStatusBarView.findViewById(R.id.left_validus_logo);
+        } else {
+            validusLogo = (ImageView) mStatusBarView.findViewById(R.id.validus_logo);
+        }
+        mValidusLogo = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_VALIDUS_LOGO, 0, mCurrentUserId) == 1;
+        mValidusLogoColor = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_VALIDUS_LOGO_COLOR, 0xFFFFFFFF, mCurrentUserId);
+        showValidusLogo(mValidusLogo, mValidusLogoColor, mValidusLogoStyle);
+
         mKeyguardUserSwitcher = new KeyguardUserSwitcher(mContext,
                 (ViewStub) mStatusBarWindowContent.findViewById(R.id.keyguard_user_switcher),
                 mKeyguardStatusBar, mNotificationPanel, mUserSwitcherController);
@@ -3493,13 +3513,21 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     };
 
-    public void showValidusLogo(boolean show, int color) {
+    public void showValidusLogo(boolean show, int color, int style) {
         if (mStatusBarView == null) return;
-        validusLogo = (ImageView) mStatusBarView.findViewById(R.id.validus_logo);
-        validusLogo.setColorFilter(color, Mode.SRC_IN);
-        if (validusLogo != null) {
-            validusLogo.setVisibility(show ? (mValidusLogo ? View.VISIBLE : View.GONE) : View.GONE);
+        if (!show) {
+            validusLogo.setVisibility(View.GONE);
+            return;
         }
+        validusLogo.setColorFilter(color, Mode.SRC_IN);
+        if (style == 0) {
+            validusLogo.setVisibility(View.GONE);
+            validusLogo = (ImageView) mStatusBarView.findViewById(R.id.left_validus_logo);
+        } else {
+            validusLogo.setVisibility(View.GONE);
+            validusLogo = (ImageView) mStatusBarView.findViewById(R.id.validus_logo);
+        }
+        validusLogo.setVisibility(View.VISIBLE);
     }
 
     private void resetUserExpandedStates() {
