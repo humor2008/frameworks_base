@@ -79,7 +79,8 @@ import java.text.NumberFormat;
  */
 public class StatusBarHeaderView extends RelativeLayout implements View.OnClickListener,
         BatteryController.BatteryStateChangeCallback,
-        StatusBarHeaderMachine.IStatusBarHeaderMachineObserver, 
+        StatusBarHeaderMachine.IStatusBarHeaderMachineObserver,
+        View.OnLongClickListener, 
         NextAlarmController.NextAlarmChangeCallback,
         EmergencyListener {
 
@@ -239,8 +240,11 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
 
         mWeatherClient = new OmniJawsClient(mContext);
         mWeatherImage.setOnClickListener(this);
+        mWeatherImage.setOnLongClickListener(this);
         mWeatherDetailed.setOnClickListener(this);
+        mWeatherDetailed.setOnLongClickListener(this);
         mWeatherDetailed.setVisibility(View.INVISIBLE);
+        mWeatherDetailed.setWeatherClient(mWeatherClient);
         mShowWeatherDetailed = false;
     }
 
@@ -607,7 +611,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         } else if (v == mWeatherImage) {
             try {
                 if (!mWeatherDataInvalid && mWeatherData != null) {
-                    mWeatherDetailed.updateWeatherData(mWeatherClient, mWeatherData);
+                    mWeatherDetailed.updateWeatherData(mWeatherData);
 
                     int finalRadius = getWidth();
                     Animator anim = ViewAnimationUtils.createCircularReveal(mWeatherDetailed,
@@ -627,10 +631,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
                     });
                     anim.start();
                 } else if (mWeatherDataInvalid) {
-                    Intent settingsIntent = mWeatherClient.getSettingsIntent();
-                    if (settingsIntent != null) {
-                        mActivityStarter.startActivity(settingsIntent, true /* dismissShade */);
-                    }
+                    showWeatherSettings();
                 }
             } catch(Exception e) {
                 Log.e(TAG, "show detailed failed", e);
@@ -654,6 +655,19 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             });
             anim.start();
         }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        if (v == mWeatherDetailed) {
+            showWeatherSettings();
+            return true;
+        } else if (v == mWeatherImage) {
+            mWeatherImage.showRefresh();
+            forceRefreshWeatherSettings();
+            return true;
+        }
+        return false;
     }
 
     private void startSettingsActivity() {
@@ -997,6 +1011,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
 
     public void queryAndUpdateWeather() {
         try {
+            mWeatherImage.stopRefresh();
             mWeatherDataInvalid = false;
             mWeatherClient.queryWeather();
             mWeatherData = mWeatherClient.getWeatherInfo();
@@ -1064,6 +1079,21 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
 
     private boolean isShowWeatherHeader() {
         return mShowWeatherHeader && mWeatherClient.isOmniJawsEnabled();
+    }
+
+    private void showWeatherSettings() {
+        if (isShowWeatherHeader()) {
+            Intent settingsIntent = mWeatherClient.getSettingsIntent();
+            if (settingsIntent != null) {
+                mActivityStarter.startActivity(settingsIntent, true /* dismissShade */);
+            }
+        }
+    }
+
+    private void forceRefreshWeatherSettings() {
+        if (isShowWeatherHeader()) {
+            mWeatherClient.updateWeather(true);
+        }
     }
 
     public void settingsChanged() {
