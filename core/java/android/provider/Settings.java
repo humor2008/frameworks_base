@@ -3230,6 +3230,12 @@ public final class Settings {
          * the setting value. See an example above.
          */
 
+        /**
+         * Whether to display dashboard tiles in a double line layout
+         * @hide
+         */
+        public static final String DASHBOARD_TILEVIEW_DOUBLE_LINES = "dashboard_tileview_double_lines";
+
          /**
          * Whether wifi settings will connect to access point automatically
          * 0 = automatically
