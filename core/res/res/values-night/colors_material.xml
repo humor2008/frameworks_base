@@ -28,4 +28,8 @@
     <color name="material_grey_50">#ffeceff1</color>
 
     <color name="material_deep_teal_200">#ff009688</color>
+    
+    <color name="material_blue_grey_800">#ff000000</color>
+    <color name="material_blue_grey_900">#ff000000</color>
+    <color name="material_blue_grey_950">#ff000000</color>    
 </resources>
