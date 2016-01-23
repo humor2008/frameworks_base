@@ -830,7 +830,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             if (showNav && !mRecreating) {
                 mNavigationBarView =
                     (NavigationBarView) View.inflate(context, R.layout.navigation_bar, null);
-                mNavigationBarView.updateResources(getNavbarThemedResources());
+            mNavigationBarView.updateResources(ActionHelper.getNavbarThemedResources(mContext));
 
                 mNavigationBarView.setDisabledFlags(mDisabled1);
                 mNavigationBarView.setBar(this);
@@ -1285,6 +1285,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     private void prepareNavigationBarView() {
+        if (mNavigationBarView == null) return;
         mNavigationBarView.reorient();
 
         View home = mNavigationBarView.getHomeButton();
@@ -1352,18 +1353,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         lp.setTitle("NavigationBar");
         lp.windowAnimations = 0;
         return lp;
-    }
-
-    private Resources getNavbarThemedResources() {
-        String pkgName = mCurrentTheme.getOverlayForNavBar();
-        Resources res = null;
-        try {
-            res = mContext.getPackageManager().getThemedResourcesForApplication(
-                    mContext.getPackageName(), pkgName);
-        } catch (PackageManager.NameNotFoundException e) {
-            res = mContext.getResources();
-        }
-        return res;
     }
 
     public void addIcon(String slot, int index, int viewIndex, StatusBarIcon icon) {
@@ -1461,6 +1450,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     protected void refreshLayout(int layoutDirection) {
         if (mNavigationBarView != null) {
             mNavigationBarView.setLayoutDirection(layoutDirection);
+            mNavigationBarView.updateResources(ActionHelper.getNavbarThemedResources(mContext));
         }
         mIconController.refreshAllStatusBarIcons();
     }
@@ -3395,7 +3385,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         if (mNavigationBarView != null && updateNavBar)  {
-            mNavigationBarView.updateResources(getNavbarThemedResources());
+            mNavigationBarView.updateResources(ActionHelper.getNavbarThemedResources(mContext));
         }
     }
 

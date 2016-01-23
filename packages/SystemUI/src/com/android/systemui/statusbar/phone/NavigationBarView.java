@@ -1095,6 +1095,10 @@ public class NavigationBarView extends LinearLayout {
         }
     }
 
+    protected void updateResources() {
+        getIcons(mContext.getResources());
+    }
+
     private void updateSettings(boolean recreate) {
         ContentResolver resolver = mContext.getContentResolver();
 
