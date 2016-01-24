@@ -678,23 +678,17 @@ public class NavigationBarView extends LinearLayout {
         }
 
         mNavigationIconHints = hints;
-        if (getBackButton() != null ) {
-            ((ImageView) getBackButton()).setImageDrawable(null);
-            ((ImageView)getBackButton()).setImageDrawable(backAlt
+        ((ImageView)getBackButton()).setImageDrawable(backAlt
                 ? (mVertical ? mBackAltLandIcon : mBackAltIcon)
                 : (mVertical ? mBackLandIcon : mBackIcon));
-        }
 
-        final boolean showImeButton = ((hints & StatusBarManager.NAVIGATION_HINT_IME_SHOWN) != 0
-                    && !mImeArrowVisibility);
-        if (getImeSwitchButton() != null) {
-            getImeSwitchButton().setVisibility(showImeButton ? View.VISIBLE : View.GONE);
-            mIsImeButtonVisible = showImeButton;
-        }
+        ((ImageView)getRecentsButton()).setImageDrawable(mVertical ? mRecentLandIcon : mRecentIcon);
+        ((ImageView)getHomeButton()).setImageDrawable(mVertical ? mHomeLandIcon : mHomeIcon);
 
-        mIsImeArrowVisible = (backAlt && mImeArrowVisibility);
-        getLeftImeArrowButton().setVisibility(mIsImeArrowVisible ? View.VISIBLE : View.GONE);
-        getRightImeArrowButton().setVisibility(mIsImeArrowVisible ? View.VISIBLE : View.GONE);
+        final boolean showImeButton = ((hints & StatusBarManager.NAVIGATION_HINT_IME_SHOWN) != 0);
+        getImeSwitchButton().setVisibility(showImeButton ? View.VISIBLE : View.INVISIBLE);
+        // Update menu button in case the IME state has changed.
+        setMenuVisibility(mShowMenu, true);
 
         setDisabledFlags(mDisabledFlags, true);
     }
