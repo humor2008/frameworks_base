@@ -679,14 +679,19 @@ public class NavigationBarView extends LinearLayout {
 
         mNavigationIconHints = hints;
 
+        ((ImageView)getBackButton()).setImageDrawable(backAlt
+                ? (mVertical ? mBackAltLandIcon : mBackAltIcon)
+                : (mVertical ? mBackLandIcon : mBackIcon));
+
         final boolean showImeButton = ((hints & StatusBarManager.NAVIGATION_HINT_IME_SHOWN) != 0);
         if (getImeSwitchButton() != null)
             getImeSwitchButton().setVisibility(showImeButton ? View.VISIBLE : View.GONE);
 
+        setDisabledFlags(mDisabledFlags, true);
+
         // Update menu button in case the IME state has changed.
         setMenuVisibility(mShowMenu, true);
 
-        setDisabledFlags(mDisabledFlags, true);
     }
 
     public void setDisabledFlags(int disabledFlags) {
