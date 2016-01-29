@@ -127,6 +127,7 @@ public class NavigationBarView extends LinearLayout {
     private Drawable mRecentIcon;
     private Drawable mRecentLandIcon;
     private Drawable mHomeIcon, mHomeLandIcon;
+    private Drawable mMenuIcon, mMenuLandIcon;
 
     private int mRippleColor;
 
@@ -352,13 +353,15 @@ public class NavigationBarView extends LinearLayout {
 
     private void getIcons(Resources res) {
         mBackIcon = res.getDrawable(R.drawable.ic_sysbar_back);
-        mBackLandIcon = mBackIcon;
+        mBackLandIcon = res.getDrawable(R.drawable.ic_sysbar_back_land);
         mBackAltIcon = res.getDrawable(R.drawable.ic_sysbar_back_ime);
-        mBackAltLandIcon = mBackAltIcon;
+        mBackAltLandIcon = res.getDrawable(R.drawable.ic_sysbar_back_ime_land);
         mRecentIcon = res.getDrawable(R.drawable.ic_sysbar_recent);
         mRecentLandIcon = res.getDrawable(R.drawable.ic_sysbar_recent_land);
         mHomeIcon = res.getDrawable(R.drawable.ic_sysbar_home);
         mHomeLandIcon = res.getDrawable(R.drawable.ic_sysbar_home_land);
+        mMenuIcon = res.getDrawable(R.drawable.ic_sysbar_menu);
+        mMenuLandIcon = res.getDrawable(R.drawable.ic_sysbar_menu_land);
     }
 
     public void updateResources(Resources res) {
@@ -678,19 +681,37 @@ public class NavigationBarView extends LinearLayout {
         }
 
         mNavigationIconHints = hints;
+        if (getBackButton() != null ) {
+            ((ImageView) getBackButton()).setImageDrawable(null);
+            ((ImageView) getBackButton()).setImageDrawable(mVertical ? mBackLandIcon : mBackIcon);
+        }
+        if (getRecentsButton() != null ) {
+            ((ImageView) getRecentsButton()).setImageDrawable(null);
+            ((ImageView) getRecentsButton()).setImageDrawable(mVertical ? mRecentLandIcon : mRecentIcon);
+	}
+        if (getHomeButton() != null ) {
+            ((ImageView) getHomeButton()).setImageDrawable(null);
+            ((ImageView)getHomeButton()).setImageDrawable(mVertical ? mHomeLandIcon : mHomeIcon);
+	}
+        if (getLeftMenuButton() != null ) {
+            ((ImageView) getLeftMenuButton()).setImageDrawable(null);
+            ((ImageView)getLeftMenuButton()).setImageDrawable(mVertical ? mMenuLandIcon : mMenuIcon);
+	}
+        if (getRightMenuButton() != null ) {
+            ((ImageView) getRightMenuButton()).setImageDrawable(null);
+            ((ImageView)getRightMenuButton()).setImageDrawable(mVertical ? mMenuLandIcon : mMenuIcon);
+	}
 
-        ((ImageView)getBackButton()).setImageDrawable(backAlt
-                ? (mVertical ? mBackAltLandIcon : mBackAltIcon)
-                : (mVertical ? mBackLandIcon : mBackIcon));
-
-        final boolean showImeButton = ((hints & StatusBarManager.NAVIGATION_HINT_IME_SHOWN) != 0);
-        if (getImeSwitchButton() != null)
+        final boolean showImeButton = ((hints & StatusBarManager.NAVIGATION_HINT_IME_SHOWN) != 0
+                    && !mImeArrowVisibility);
+        if (getImeSwitchButton() != null) {
             getImeSwitchButton().setVisibility(showImeButton ? View.VISIBLE : View.GONE);
+            mIsImeButtonVisible = showImeButton;
+        }
 
-        setDisabledFlags(mDisabledFlags, true);
-
-        // Update menu button in case the IME state has changed.
-        setMenuVisibility(mShowMenu, true);
+        mIsImeArrowVisible = (backAlt && mImeArrowVisibility);
+        getLeftImeArrowButton().setVisibility(mIsImeArrowVisible ? View.VISIBLE : View.GONE);
+        getRightImeArrowButton().setVisibility(mIsImeArrowVisible ? View.VISIBLE : View.GONE);
 
     }
 
@@ -1106,7 +1127,7 @@ public class NavigationBarView extends LinearLayout {
         }
 
         mNavBarButtonColorMode = Settings.System.getIntForUser(resolver,
-                Settings.System.NAVIGATION_BAR_BUTTON_TINT_MODE, 0, UserHandle.USER_CURRENT);
+                Settings.System.NAVIGATION_BAR_BUTTON_TINT_MODE, 3, UserHandle.USER_CURRENT);
 
         mButtonsConfig = ActionHelper.getNavBarConfig(mContext);
 
