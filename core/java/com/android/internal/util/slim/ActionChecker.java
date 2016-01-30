@@ -28,6 +28,7 @@ public class ActionChecker {
 
     static {
         mConfigs.add(Settings.System.NAVIGATION_BAR_CONFIG);
+        mConfigs.add(Settings.System.PIE_BUTTONS_CONFIG);
     }
 
     public static boolean actionConfigContainsAction(ActionConfig config, String action) {

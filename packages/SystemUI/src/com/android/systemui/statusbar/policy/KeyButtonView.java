@@ -21,6 +21,7 @@ import android.animation.ObjectAnimator;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.IActivityManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.pm.PackageManager;
@@ -31,11 +32,14 @@ import android.graphics.Canvas;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.database.ContentObserver;
 import android.hardware.input.InputManager;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PowerManager;
 import android.os.RemoteException;
+import android.provider.Settings;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.provider.Settings;
@@ -79,7 +83,12 @@ public class KeyButtonView extends ImageView {
     private LongClickCallback mCallback;
     private KeyButtonRipple mRipple;
 
+    private boolean mShouldTintIcons = true;
+    private static int color;
+
     private PowerManager mPm;
+
+    private final Handler mHandler = new Handler();
 
     private final Runnable mCheckLongPress = new Runnable() {
         public void run() {
@@ -131,6 +140,9 @@ public class KeyButtonView extends ImageView {
         mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         mRipple = new KeyButtonRipple(context, this);
         setBackground(mRipple);
+
+        SettingsObserver settingsObserver = new SettingsObserver(new Handler());
+        settingsObserver.observe();
     }
 
     @Override
@@ -341,6 +353,47 @@ public class KeyButtonView extends ImageView {
 
     public interface LongClickCallback {
         public boolean onLongClick(View v);
+    }
+
+
+    public void setTint(boolean tint) {
+        setColorFilter(null);
+        if (tint) {
+            color = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_TINT, -1);
+            if (color != -1) {
+                reportColor();
+                setColorFilter(color);
+            }
+        }
+        mShouldTintIcons = tint;
+    }
+
+    public static int reportColor() {
+        return color;
+    }
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NAVIGATION_BAR_TINT), false, this);
+            updateSettings();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings();
+        }
+    }
+
+    protected void updateSettings() {
+        setTint(mShouldTintIcons);
+        invalidate();
     }
 }
 

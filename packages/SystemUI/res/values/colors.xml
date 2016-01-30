@@ -144,4 +144,15 @@
     <color name="volume_settings_icon_color">#7fffffff</color>
     <color name="volume_slider_inactive">#FFB0BEC5</color><!-- blue grey 200 -->
     <color name="volume_slider_active">@color/system_accent_color</color>
+
+    <!-- Pie controls -->
+    <color name="pie_overlay_color">#ff000000</color>
+    <color name="pie_snap_color">#ffffffff</color>
+    <color name="pie_text_color">#ffffffff</color>
+    <color name="pie_foreground_color">#ffffffff</color>
+    <color name="pie_background_color">#ff000000</color>
+    <color name="pie_selected_color">#ff009688</color>
+    <color name="pie_long_pressed_color">#ff8c8c8c</color>
+    <color name="pie_outline_color">#ff009688</color>
+
 </resources>

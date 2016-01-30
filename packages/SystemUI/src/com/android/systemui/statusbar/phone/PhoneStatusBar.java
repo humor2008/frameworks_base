@@ -17,6 +17,19 @@
 package com.android.systemui.statusbar.phone;
 
 
+import static android.app.StatusBarManager.NAVIGATION_HINT_BACK_ALT;
+import static android.app.StatusBarManager.NAVIGATION_HINT_IME_SHOWN;
+import static android.app.StatusBarManager.WINDOW_STATE_HIDDEN;
+import static android.app.StatusBarManager.WINDOW_STATE_SHOWING;
+import static android.app.StatusBarManager.windowStateToString;
+import static com.android.systemui.statusbar.phone.BarTransitions.MODE_LIGHTS_OUT;
+import static com.android.systemui.statusbar.phone.BarTransitions.MODE_LIGHTS_OUT_TRANSPARENT;
+import static com.android.systemui.statusbar.phone.BarTransitions.MODE_OPAQUE;
+import static com.android.systemui.statusbar.phone.BarTransitions.MODE_SEMI_TRANSPARENT;
+import static com.android.systemui.statusbar.phone.BarTransitions.MODE_TRANSLUCENT;
+import static com.android.systemui.statusbar.phone.BarTransitions.MODE_TRANSPARENT;
+import static com.android.systemui.statusbar.phone.BarTransitions.MODE_WARNING;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.NonNull;
@@ -188,19 +201,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
-
-import static android.app.StatusBarManager.NAVIGATION_HINT_BACK_ALT;
-import static android.app.StatusBarManager.NAVIGATION_HINT_IME_SHOWN;
-import static android.app.StatusBarManager.WINDOW_STATE_HIDDEN;
-import static android.app.StatusBarManager.WINDOW_STATE_SHOWING;
-import static android.app.StatusBarManager.windowStateToString;
-import static com.android.systemui.statusbar.phone.BarTransitions.MODE_LIGHTS_OUT;
-import static com.android.systemui.statusbar.phone.BarTransitions.MODE_LIGHTS_OUT_TRANSPARENT;
-import static com.android.systemui.statusbar.phone.BarTransitions.MODE_OPAQUE;
-import static com.android.systemui.statusbar.phone.BarTransitions.MODE_SEMI_TRANSPARENT;
-import static com.android.systemui.statusbar.phone.BarTransitions.MODE_TRANSLUCENT;
-import static com.android.systemui.statusbar.phone.BarTransitions.MODE_TRANSPARENT;
-import static com.android.systemui.statusbar.phone.BarTransitions.MODE_WARNING;
 
 public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         DragDownHelper.DragDownCallback, ActivityStarter, OnUnlockMethodChangedListener,
@@ -403,12 +403,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NAVIGATION_BAR_BUTTON_TINT),
-                    false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NAVIGATION_BAR_BUTTON_TINT_MODE),
-                    false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAVIGATION_BAR_GLOW_TINT),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -426,6 +420,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAVIGATION_BAR_IME_ARROWS),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.PIE_CONTROLS), false, this,
+                    UserHandle.USER_ALL);
         }
 
         @Override
@@ -433,10 +430,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             super.onChange(selfChange, uri);
 
             if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.NAVIGATION_BAR_BUTTON_TINT))
-                || uri.equals(Settings.System.getUriFor(
-                    Settings.System.NAVIGATION_BAR_BUTTON_TINT_MODE))
-                || uri.equals(Settings.System.getUriFor(
                     Settings.System.NAVIGATION_BAR_CONFIG))
                 || uri.equals(Settings.System.getUriFor(
                     Settings.System.NAVIGATION_BAR_GLOW_TINT))
@@ -448,6 +441,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     mNavigationBarView.recreateNavigationBar();
                     prepareNavigationBarView();
                 }
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.PIE_CONTROLS))) {
+                attachPieContainer(isPieEnabled());
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.NAVIGATION_BAR_CAN_MOVE))) {
                 prepareNavigationBarView();
@@ -507,6 +503,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
         }
     };
+
+    private boolean isPieEnabled() {
+        return Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_CONTROLS, 0,
+                UserHandle.USER_CURRENT) == 1;
+    }
 
     private int mInteractingWindows;
     private boolean mAutohideSuspended;
@@ -834,6 +836,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
                 mNavigationBarView.setDisabledFlags(mDisabled1);
                 mNavigationBarView.setBar(this);
+                addNavigationBarCallback(mNavigationBarView);
                 mNavigationBarView.setOnVerticalChangedListener(
                         new NavigationBarView.OnVerticalChangedListener() {
                     @Override
@@ -856,6 +859,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         mAssistManager = new AssistManager(this, context);
+
+        // Setup pie container if enabled
+        attachPieContainer(isPieEnabled());
 
         if (mNavigationBarView == null) {
             mNavigationBarView =
@@ -1327,6 +1333,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         prepareNavigationBarView();
 
         mWindowManager.updateViewLayout(mNavigationBarView, getNavigationBarLayoutParams());
+        mNavigationBarOverlay.setNavigationBar(mNavigationBarView);
     }
 
     private void notifyNavigationBarScreenOn(boolean screenOn) {
@@ -2088,8 +2095,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                         | StatusBarManager.DISABLE_RECENT
                         | StatusBarManager.DISABLE_BACK
                         | StatusBarManager.DISABLE_SEARCH)) != 0) {
-            // the nav bar will take care of these
-            if (mNavigationBarView != null) mNavigationBarView.setDisabledFlags(state1);
+
+            // Disabled for the time being
+            // propagateDisabledFlags(state);
 
             if ((state1 & StatusBarManager.DISABLE_RECENT) != 0) {
                 // close recents if it's visible
@@ -2543,9 +2551,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         mNavigationIconHints = hints;
 
-        if (mNavigationBarView != null) {
-            mNavigationBarView.setNavigationIconHints(hints);
-        }
+        propagateNavigationIconHints(hints);
         checkBarModes();
     }
 
@@ -2838,9 +2844,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (DEBUG) {
             Log.d(TAG, (showMenu?"showing":"hiding") + " the MENU button");
         }
-        if (mNavigationBarView != null) {
-            mNavigationBarView.setMenuVisibility(showMenu);
-        }
+
+        propagateMenuVisibility(showMenu);
 
         // See above re: lights-out policy for legacy apps.
         if (showMenu) setLightsOn(true);
@@ -3273,6 +3278,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             removeSignalCallbacks(mNetworkController);
         }
 
+        attachPieContainer(!isPieEnabled());
+
         mStatusBarWindow.removeContent(mStatusBarWindowContent);
         mStatusBarWindow.clearDisappearingChildren();
 
@@ -3299,6 +3306,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         makeStatusBarView();
         repositionNavigationBar();
+        attachPieContainer(isPieEnabled());
 
         // re-add status icons
         for (int i = 0; i < nIcons; i++) {

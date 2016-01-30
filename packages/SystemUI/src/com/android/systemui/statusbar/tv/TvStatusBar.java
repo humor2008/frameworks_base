@@ -77,6 +77,7 @@ public class TvStatusBar extends BaseStatusBar {
 
     @Override
     public void topAppWindowChanged(boolean visible) {
+        propagateMenuVisibility(visible);
     }
 
     @Override

@@ -4125,4 +4125,7 @@
     <string name="China_Mobile">China Mobile</string>
     <string name="China_Unicom">China Unicom</string>
     <string name="China_Telecom">China Telecom</string>
+
+    <!-- SlimSeekBarPref -->
+    <string name="default_string">Default</string>
 </resources>

@@ -289,6 +289,9 @@ LOCAL_SRC_FILES += \
 	core/java/com/android/internal/app/IVoiceInteractor.aidl \
 	core/java/com/android/internal/app/IVoiceInteractorCallback.aidl \
 	core/java/com/android/internal/app/IVoiceInteractorRequest.aidl \
+	core/java/android/service/gesture/IEdgeGestureService.aidl \
+	core/java/android/service/gesture/IEdgeGestureActivationListener.aidl \
+	core/java/android/service/gesture/IEdgeGestureHostCallback.aidl \
 	core/java/com/android/internal/app/IMediaContainerService.aidl \
 	core/java/com/android/internal/appwidget/IAppWidgetService.aidl \
 	core/java/com/android/internal/appwidget/IAppWidgetHost.aidl \

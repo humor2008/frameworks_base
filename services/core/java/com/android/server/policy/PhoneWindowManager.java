@@ -127,6 +127,8 @@ import com.android.server.GestureLauncherService;
 import com.android.server.LocalServices;
 import com.android.server.policy.keyguard.KeyguardServiceDelegate;
 import com.android.server.policy.keyguard.KeyguardServiceDelegate.DrawnListener;
+import com.android.internal.util.gesture.EdgeGesturePosition;
+import com.android.internal.util.slim.Converter;
 
 import dalvik.system.DexClassLoader;
 
@@ -360,6 +362,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mNavigationBarOnBottom = true; // is the navigation bar on the bottom *right now*?
     int[] mNavigationBarHeightForRotation = new int[4];
     int[] mNavigationBarWidthForRotation = new int[4];
+    int mNavigationBarHeight;
+    int mNavigationBarHeightLandscape;
+    int mNavigationBarWidth;
 
     boolean mBootMessageNeedsHiding;
     KeyguardServiceDelegate mKeyguardDelegate;
@@ -1975,6 +1980,42 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mHasNavigationBar = Settings.System.getIntForUser(resolver,
                     Settings.System.NAVIGATION_BAR_SHOW, showByDefault,
                     UserHandle.USER_CURRENT) == 1;
+
+            mNavigationBarHeight =
+                    Settings.System.getIntForUser(mContext.getContentResolver(),
+                            Settings.System.NAVIGATION_BAR_HEIGHT, -2,
+                            UserHandle.USER_CURRENT);
+            if (mNavigationBarHeight == -2) {
+                mNavigationBarHeight = mContext.getResources().getDimensionPixelSize(
+                        com.android.internal.R.dimen.navigation_bar_height);
+            } else {
+                mNavigationBarHeight =
+                        Converter.dpToPx(mContext, mNavigationBarHeight);
+            }
+
+            mNavigationBarHeightLandscape =
+                    Settings.System.getIntForUser(mContext.getContentResolver(),
+                            Settings.System.NAVIGATION_BAR_HEIGHT_LANDSCAPE, -2,
+                            UserHandle.USER_CURRENT);
+            if (mNavigationBarHeightLandscape == -2) {
+                mNavigationBarHeightLandscape = mContext.getResources().getDimensionPixelSize(
+                        com.android.internal.R.dimen.navigation_bar_height_landscape);
+            } else {
+                mNavigationBarHeightLandscape =
+                        Converter.dpToPx(mContext, mNavigationBarHeightLandscape);
+            }
+
+            mNavigationBarWidth =
+                    Settings.System.getIntForUser(mContext.getContentResolver(),
+                            Settings.System.NAVIGATION_BAR_WIDTH, -2,
+                            UserHandle.USER_CURRENT);
+            if (mNavigationBarWidth == -2) {
+                mNavigationBarWidth = mContext.getResources().getDimensionPixelSize(
+                        com.android.internal.R.dimen.navigation_bar_width);
+            } else {
+                mNavigationBarWidth =
+                        Converter.dpToPx(mContext, mNavigationBarWidth);
+            }
 
             if (!mHasNavigationBar) {
                 // Set the navigation bar's dimensions to 0 in expanded desktop mode
@@ -3979,7 +4020,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // it to bubble up from the nav bar, because this needs to
                 // change atomically with screen rotations.
                 mNavigationBarOnBottom = (!mNavigationBarCanMove || displayWidth < displayHeight);
-                if (mNavigationBarOnBottom) {
+                setPieTriggerMask(displayWidth < displayHeight);
+               if (mNavigationBarOnBottom) {
                     // It's a system nav bar or a portrait screen; nav bar goes on bottom.
                     int top = displayHeight - overscanBottom
                             - mNavigationBarHeightForRotation[displayRotation];
@@ -4114,6 +4156,37 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (updateSysUiVisibility) {
                 updateSystemUiVisibilityLw();
             }
+        }
+    }
+
+    private void setPieTriggerMask(boolean isPortrait) {
+        int newMask = EdgeGesturePosition.LEFT.FLAG;
+        if (mHasNavigationBar) {
+            if (mNavigationBarOnBottom) {
+                newMask |= EdgeGesturePosition.RIGHT.FLAG;
+                if (isPortrait && mNavigationBarHeight == 0
+                        || !isPortrait && mNavigationBarHeightLandscape == 0) {
+                    newMask |= EdgeGesturePosition.BOTTOM.FLAG;
+                }
+            } else {
+                newMask |= EdgeGesturePosition.BOTTOM.FLAG;
+                if (mNavigationBarWidth == 0) {
+                    newMask |= EdgeGesturePosition.RIGHT.FLAG;
+                }
+            }
+        } else {
+            newMask |= EdgeGesturePosition.RIGHT.FLAG
+                    | EdgeGesturePosition.BOTTOM.FLAG;
+        }
+        try {
+            IStatusBarService statusbar = getStatusBarService();
+            if (statusbar != null) {
+                statusbar.setPieTriggerMask(newMask, false);
+            }
+        } catch (RemoteException e) {
+            Slog.e(TAG, "RemoteException when updating PIE trigger mask", e);
+            // Re-acquire status bar service next time it is needed.
+            mStatusBarService = null;
         }
     }
 
@@ -4694,6 +4767,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 && !win.getGivenInsetsPendingLw()) {
             offsetVoiceInputWindowLw(win);
         }
+    }
+
+    /** {@inheritDoc} */
+    public int getCurrentNavigationBarSize() {
+        boolean landscape = mContext.getResources().getConfiguration()
+            .orientation == Configuration.ORIENTATION_LANDSCAPE;
+        if (landscape && !mNavigationBarCanMove) {
+            return mNavigationBarHeightLandscape;
+        } else if (landscape && mNavigationBarCanMove) {
+            return mNavigationBarWidth;
+        }
+        return mNavigationBarHeight;
     }
 
     /** {@inheritDoc} */
