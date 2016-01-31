@@ -83,9 +83,6 @@ public class KeyButtonView extends ImageView {
     private LongClickCallback mCallback;
     private KeyButtonRipple mRipple;
 
-    private boolean mShouldTintIcons = true;
-    private static int color;
-
     private PowerManager mPm;
 
     private final Handler mHandler = new Handler();
@@ -140,9 +137,6 @@ public class KeyButtonView extends ImageView {
         mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         mRipple = new KeyButtonRipple(context, this);
         setBackground(mRipple);
-
-        SettingsObserver settingsObserver = new SettingsObserver(new Handler());
-        settingsObserver.observe();
     }
 
     @Override
@@ -353,47 +347,6 @@ public class KeyButtonView extends ImageView {
 
     public interface LongClickCallback {
         public boolean onLongClick(View v);
-    }
-
-
-    public void setTint(boolean tint) {
-        setColorFilter(null);
-        if (tint) {
-            color = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.NAVIGATION_BAR_TINT, -1);
-            if (color != -1) {
-                reportColor();
-                setColorFilter(color);
-            }
-        }
-        mShouldTintIcons = tint;
-    }
-
-    public static int reportColor() {
-        return color;
-    }
-
-    class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NAVIGATION_BAR_TINT), false, this);
-            updateSettings();
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            updateSettings();
-        }
-    }
-
-    protected void updateSettings() {
-        setTint(mShouldTintIcons);
-        invalidate();
     }
 }
 
