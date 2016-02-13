@@ -476,11 +476,8 @@ public class QsTuner extends Fragment implements Callback {
 	    else if (mSpec.equals("themes")) return R.drawable.ic_qs_themes_on;
             else if (mSpec.equals("adb_network")) return R.drawable.ic_qs_network_adb_on;
             else if (mSpec.equals("caffeine")) return R.drawable.ic_qs_caffeine_on;
-<<<<<<< HEAD
-=======
             else if (mSpec.equals("ime")) return R.drawable.ic_qs_ime;
  	    else if (mSpec.equals("kill_app")) return R.drawable.ic_app_kill;
->>>>>>> d7ff652... QS: Kill App Tile [1/2]
             return R.drawable.android;
         }
 
