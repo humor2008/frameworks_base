@@ -29,8 +29,11 @@
          For example, a device with Home, Back and Menu keys would set this
          config to 7. -->
     <integer name="config_deviceHardwareKeys">64</integer>
+<<<<<<< HEAD
 
     <!-- If this is true, key chords can be used to take a screen record on the device. -->
     <bool name="config_enableScreenrecordChord">true</bool>
 
+=======
+>>>>>>> a1f9a50... Buttons: Bring up TeamEos hardware key action binding framework [1/3]
 </resources>
