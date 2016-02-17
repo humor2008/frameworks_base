@@ -4287,6 +4287,12 @@ public final class Settings {
         public static final String TRANSPARENT_POWER_MENU = "transparent_power_menu";
 
         /**
+         * Whether to display dashboard dividers
+         * @hide
+         */
+        public static final String DASHBOARD_TILEVIEW_DIVIDERS = "dashboard_tileview_dividers";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
