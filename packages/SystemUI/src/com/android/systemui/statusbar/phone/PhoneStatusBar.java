@@ -687,11 +687,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 rebuildRecentsScreen();
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_VALIDUS_LOGO_STYLE))) {
-                recreateStatusBar();
-                updateRowStates();
-                updateSpeedbump();
-                updateClearAll();
-                updateEmptyShadeView();
+                            recreateStatusBar();
+                            updateRowStates();
+                            updateSpeedbump();
+                            updateClearAll();
+                            updateEmptyShadeView();
             }
         }
          public void update() {
