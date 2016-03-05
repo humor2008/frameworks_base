@@ -683,6 +683,23 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 rebuildRecentsScreen();
             }
         }
+         public void update() {
+            ContentResolver resolver = mContext.getContentResolver();
+            mValidusLogoStyle = Settings.System.getIntForUser(
+                    resolver, Settings.System.STATUS_BAR_VALIDUS_LOGO_STYLE, 0,
+                    UserHandle.USER_CURRENT);
+            mValidusLogo = Settings.System.getIntForUser(resolver,
+                    Settings.System.STATUS_BAR_VALIDUS_LOGO, 0, mCurrentUserId) == 1;
+            mValidusLogoColor = Settings.System.getIntForUser(resolver,
+                    Settings.System.STATUS_BAR_VALIDUS_LOGO_COLOR, 0xFFFFFFFF, mCurrentUserId);
+            if (mValidusLogoStyle == 0) {
+                ValidusLogo = (ImageView) mStatusBarView.findViewById(R.id.left_Validus_logo);
+            } else {
+                ValidusLogo = (ImageView) mStatusBarView.findViewById(R.id.Validus_logo);
+            }
+            showValidusLogo(mValidusLogo, mValidusLogoColor, mValidusLogoStyle);
+
+        }
     }
 
     private int mInteractingWindows;
@@ -3701,6 +3718,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (newTheme != null) mCurrentTheme = (ThemeConfig) newTheme.clone();
         if (updateStatusBar) {
             recreateStatusBar();
+            if (mNavigationBarView != null) {
+                mNavigationBarView.onRecreateStatusbar();
+            }
+            observer.update();
         } else {
             loadDimens();
         }
