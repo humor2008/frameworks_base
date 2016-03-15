@@ -4902,6 +4902,18 @@ public final class Settings {
        public static final String USB_DATA_AUTO_UNLOCK = "usb_data_auto_unlock";
 
         /**
+         * Dashboard title text size
+         * @hide
+         */
+        public static final String SETTINGS_TITLE_TEXT_SIZE = "settings_title_text_size";
+
+        /**
+         * Dashboard category text size
+         * @hide
+         */
+        public static final String SETTINGS_CATEGORY_TEXT_SIZE = "settings_category_text_size";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
