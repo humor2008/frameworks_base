@@ -690,7 +690,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                             updateSpeedbump();
                             updateClearAll();
                             updateEmptyShadeView();
-            }
+	   }
+            update();
         }
          public void update() {
             ContentResolver resolver = mContext.getContentResolver();
@@ -707,6 +708,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 validusLogo = (ImageView) mStatusBarView.findViewById(R.id.Validus_logo);
             }
             showValidusLogo(mValidusLogo, mValidusLogoColor, mValidusLogoStyle);
+             mHeader.settingsChanged();
 
         }
     }
