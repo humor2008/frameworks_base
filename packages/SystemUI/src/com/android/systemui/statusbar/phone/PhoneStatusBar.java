@@ -123,8 +123,8 @@ import com.android.internal.utils.du.DUActionUtils;
 import com.android.internal.utils.du.DUPackageMonitor;
 import com.android.internal.utils.du.DUSystemReceiver;
 import com.android.internal.util.cm.WeatherControllerImpl;
+import com.android.internal.util.benzo.Helpers;
 import com.android.internal.util.darkkat.DeviceUtils;
-
 import com.android.keyguard.CarrierText;
 import com.android.keyguard.KeyguardHostView.OnDismissAction;
 import com.android.keyguard.KeyguardUpdateMonitor;
@@ -311,7 +311,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     BrightnessMirrorController mBrightnessMirrorController;
     AccessibilityController mAccessibilityController;
     FingerprintUnlockController mFingerprintUnlockController;
-    WeatherControllerImpl mWeatherController;
 
     int mNaturalBarHeight = -1;
 
@@ -1218,7 +1217,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mUserSwitcherController = new UserSwitcherController(mContext, mKeyguardMonitor,
                     mHandler);
         }
-        mWeatherController = new WeatherControllerImpl(mContext);
 
              ContentResolver resolver = mContext.getContentResolver();
         mValidusLogoStyle = Settings.System.getIntForUser(mContext.getContentResolver(),
@@ -1277,7 +1275,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 .setBatteryController(mBatteryController);
         mKeyguardStatusBar.setBatteryController(mBatteryController);
         mHeader.setNextAlarmController(mNextAlarmController);
-        mHeader.setWeatherController(mWeatherController);
         PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mBroadcastReceiver.onReceive(mContext,
                 new Intent(pm.isScreenOn() ? Intent.ACTION_SCREEN_ON : Intent.ACTION_SCREEN_OFF));
