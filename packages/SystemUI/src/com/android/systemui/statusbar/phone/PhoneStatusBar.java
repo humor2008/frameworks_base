@@ -467,6 +467,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mNavigationBarView.notifyInflateFromUser(); // let bar know we're not starting from boot
 //        addNavigationBar(true); // dynamically adding nav bar, reset System UI visibility!
         addNavigationBar();
+       }
 
     // ensure quick settings is disabled until the current user makes it through the setup wizard
     private boolean mUserSetup = false;
