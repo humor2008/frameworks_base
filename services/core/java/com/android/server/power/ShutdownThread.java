@@ -68,7 +68,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import com.android.internal.util.benzo.Helpers;
+import com.android.internal.util.du.Helpers;
 
 public final class ShutdownThread extends Thread {
     // constants

@@ -3419,7 +3419,7 @@ public final class Settings {
          *
          * @hide
          */
-        public static final String DIALER_OPENCNAM_AUTH_TOKEN = "dialer_opencnam_auth_token";]
+        public static final String DIALER_OPENCNAM_AUTH_TOKEN = "dialer_opencnam_auth_token";
 
         /** @hide */
         public static final Validator SIP_ASK_ME_EACH_TIME_VALIDATOR = sBooleanValidator;
@@ -4656,27 +4656,6 @@ public final class Settings {
          * @hide
          */
         public static final String STATUS_BAR_NETWORK_TRAFFIC_ICON_COLOR = "status_bar_network_traffic_icon_color";
-
-        /**
-         * @hide
-         */
-        public static final String PA_PIE_OUTLINES = "pa_pie_outlines";
-
-        /**
-         * @hide
-         */
-        public static final String PA_PIE_STATUS_CLOCK = "pa_pie_status_clock";
-
-        /**
-         * @hide
-         */
-        public static final String PA_PIE_STATUS = "pa_pie_status";
-
-        /**
-         * @hide
-         */
-        public static final String PA_PIE_CHEVRON = "pa_pie_chevron";
->>>>>>> 55784c2... Status bar: Network traffic, (1/2):
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
