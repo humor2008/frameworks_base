@@ -122,7 +122,6 @@ import com.android.internal.utils.du.ActionHandler;
 import com.android.internal.utils.du.DUActionUtils;
 import com.android.internal.utils.du.DUPackageMonitor;
 import com.android.internal.utils.du.DUSystemReceiver;
-import com.android.internal.util.cm.WeatherControllerImpl;
 import com.android.internal.util.benzo.Helpers;
 import com.android.internal.util.darkkat.DeviceUtils;
 import com.android.keyguard.CarrierText;
