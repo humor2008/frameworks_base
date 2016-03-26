@@ -263,7 +263,7 @@ public interface MetricsConstants {
     public static final int TUNER_BATTERY_PERCENTAGE = 237;
     public static final int FUELGAUGE_INACTIVE_APPS = 238;
     // Validus 
-    public static final int THE_VOID = 239;
+    public static final int THE_WOLF = 239;
     public static final int QS_LOCATION_DETAILS = 240;
     public static final int QS_HEADSUP = 241;
     public static final int QS_EXPANDED = 242;
