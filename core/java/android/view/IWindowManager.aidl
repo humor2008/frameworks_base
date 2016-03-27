@@ -255,7 +255,6 @@ interface IWindowManager
     /**
      * Device needs a software navigation bar (because it has no hardware keys).
      */
-    boolean hasPermanentMenuKey();
     boolean needsNavigationBar();
 
     /**

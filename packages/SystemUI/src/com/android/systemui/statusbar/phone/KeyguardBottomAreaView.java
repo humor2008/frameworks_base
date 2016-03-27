@@ -904,6 +904,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
                 mEmergencyButton.updateEmergencyCallButton();
             }
         }
+    }
 
     private boolean VoiceAssist() {
         return getResources().getBoolean(R.bool.config_keyguardShowVoiceAssistAffordance);

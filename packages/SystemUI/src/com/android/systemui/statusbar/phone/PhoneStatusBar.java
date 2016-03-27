@@ -122,7 +122,7 @@ import com.android.internal.utils.du.ActionHandler;
 import com.android.internal.utils.du.DUActionUtils;
 import com.android.internal.utils.du.DUPackageMonitor;
 import com.android.internal.utils.du.DUSystemReceiver;
-import com.android.internal.util.benzo.Helpers;
+import com.android.internal.util.du.Helpers;
 import com.android.internal.util.darkkat.DeviceUtils;
 import com.android.keyguard.CarrierText;
 import com.android.keyguard.KeyguardHostView.OnDismissAction;
@@ -471,11 +471,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             return;
         }
 
-        mNavigationBarView = mNavigationController.getNavigationBarView();
-
+        mNavigationBarView = mNavigationController.getNavigationBarView(mContext);
         mNavigationBarView.setDisabledFlags(mDisabled1);
 //        addNavigationBarCallback(mNavigationBarView);
-        mNavigationBarView.updateResources(getNavbarThemedResources());
         mNavigationBarView.notifyInflateFromUser(); // let bar know we're not starting from boot
 //        addNavigationBar(true); // dynamically adding nav bar, reset System UI visibility!
         addNavigationBar();
@@ -703,9 +701,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mValidusLogoColor = Settings.System.getIntForUser(resolver,
                     Settings.System.STATUS_BAR_VALIDUS_LOGO_COLOR, 0xFFFFFFFF, mCurrentUserId);
             if (mValidusLogoStyle == 0) {
-                validusLogo = (ImageView) mStatusBarView.findViewById(R.id.left_Validus_logo);
+                validusLogo = (ImageView) mStatusBarView.findViewById(R.id.left_validus_logo);
             } else {
-                validusLogo = (ImageView) mStatusBarView.findViewById(R.id.Validus_logo);
+                validusLogo = (ImageView) mStatusBarView.findViewById(R.id.validus_logo);
             }
             showValidusLogo(mValidusLogo, mValidusLogoColor, mValidusLogoStyle);
              mHeader.settingsChanged();
@@ -1006,14 +1004,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mStatusBarView = (PhoneStatusBarView) mStatusBarWindowContent.findViewById(R.id.status_bar);
         mStatusBarView.setBar(this);
 
-        if (mNavigationController == null) {
-            mNavigationController = new NavigationController(mContext, this, mAddNavigationBar,
-                    mRemoveNavigationBar);
-        }
-        mPackageMonitor = new DUPackageMonitor();
-        mPackageMonitor.register(mContext, mHandler);
-        mPackageMonitor.addListener(mNavigationController);
-
         PanelHolder holder = (PanelHolder) mStatusBarWindowContent.findViewById(R.id.panel_holder);
         mStatusBarView.setPanelHolder(holder);
 
@@ -1044,8 +1034,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             boolean showNav = mWindowManagerService.hasNavigationBar();
             if (DEBUG) Log.v(TAG, "hasNavigationBar=" + showNav);
             if (showNav && !mRecreating) {
-                mNavigationBarView = mNavigationController.getNavigationBarView();
-                mNavigationBarView.updateResources(getNavbarThemedResources());
+                mNavigationBarView = mNavigationController.getNavigationBarView(mContext);
                 mNavigationBarView.setDisabledFlags(mDisabled1);
             }
         } catch (RemoteException ex) {
@@ -1053,13 +1042,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         mAssistManager = new AssistManager(this, context);
+        if (mNavigationBarView == null) {
+            mAssistManager.onConfigurationChanged();
+        }
 
         // figure out which pixel-format to use for the status bar.
         mPixelFormat = PixelFormat.OPAQUE;
-
-        if (mContext.getResources().getBoolean(R.bool.enable_operator_name)) {
-            mCarrierText = mStatusBarView.findViewById(R.id.status_carrier_text);
-        }
 
         mStackScroller = (NotificationStackScrollLayout) mStatusBarWindowContent.findViewById(
                 R.id.notification_stack_scroller);
@@ -1189,23 +1177,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mNetworkController.addEmergencyListener(mHeader);
         }
 
-        mCarrierLabel = (TextView)mStatusBarWindow.findViewById(R.id.carrier_label);
-        final boolean showCarrierLabel = mContext.getResources().getBoolean(
-                R.bool.config_showCarrierLabel);
-        mShowCarrierInPanel = showCarrierLabel && (mCarrierLabel != null);
-        if (DEBUG) Log.v(TAG, "carrierlabel=" + mCarrierLabel + " show=" + mShowCarrierInPanel);
-        if (mShowCarrierInPanel) {
-            mCarrierLabel.setVisibility(mShowCarrierInPanel ? View.VISIBLE : View.INVISIBLE);
-        }
-
-        // make sure carrier label is not covered by navigation bar
-        if (mCarrierLabel != null && mNavigationBarView != null) {
-            MarginLayoutParams mlp = (MarginLayoutParams) mCarrierLabel.getLayoutParams();
-            if (mlp != null && mlp.bottomMargin < mNavigationBarView.mBarSize) {
-                mlp.bottomMargin = mNavigationBarView.mBarSize;
-                mCarrierLabel.setLayoutParams(mlp);
-            }
-        }
         mFlashlightController = new FlashlightController(mContext);
         mKeyguardBottomArea.setFlashlightController(mFlashlightController);
         mKeyguardBottomArea.setPhoneStatusBar(this);
@@ -3766,8 +3737,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mBrightnessMirrorController.updateResources();
         }
 
-        if (mNavigationBarView != null && updateNavBar)  {
-            mNavigationBarView.updateResources(getNavbarThemedResources());
+        if (updateNavBar)  {
+            mNavigationController.updateNavbarOverlay(getNavbarThemedResources());
         }
     }
 
