@@ -52,4 +52,7 @@
          Fall back to config_webViewPackageName if not available. -->
     <string name="config_alternateWebViewPackageName" translatable="false">com.google.android.webview</string>
 
+    <!-- Bool whether to show Hardware keys settings in WolvesDen -->
+    <bool name="config_showHwKeys">false</bool>
+
 </resources>
