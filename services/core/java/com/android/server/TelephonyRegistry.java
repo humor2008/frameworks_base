@@ -327,7 +327,6 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
             mDataConnectionApn[i] =  "";
             mCellLocation[i] = new Bundle();
             mCellInfo.add(i, null);
-            mConnectedApns[i] = new ArrayList<String>();
         }
 
         // Note that location can be null for non-phone builds like
