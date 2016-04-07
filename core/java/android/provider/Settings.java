@@ -4750,11 +4750,6 @@ public final class Settings {
          */
         public static final String STATUS_BAR_NETWORK_TRAFFIC_ICON_COLOR = "status_bar_network_traffic_icon_color";
 
-        /**
-         * header image package to use for daylight header - package name - null if default
-         * @hide
-         */
-        public static final String STATUS_BAR_DAYLIGHT_HEADER_PACK = "status_bar_daylight_header_pack";
 
         /**
          * Whether to apply a shadow on top of the header image
