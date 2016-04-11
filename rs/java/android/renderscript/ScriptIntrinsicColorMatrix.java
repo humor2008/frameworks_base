@@ -252,7 +252,7 @@ public final class ScriptIntrinsicColorMatrix extends ScriptIntrinsic {
             !ain.getElement().isCompatible(Element.F32_3(mRS)) &&
             !ain.getElement().isCompatible(Element.F32_4(mRS))) {
 
-            throw new RSIllegalArgumentException("Unsuported element type.");
+            throw new RSIllegalArgumentException("Unsupported element type.");
         }
 
         if (!aout.getElement().isCompatible(Element.U8(mRS)) &&
@@ -264,7 +264,7 @@ public final class ScriptIntrinsicColorMatrix extends ScriptIntrinsic {
             !aout.getElement().isCompatible(Element.F32_3(mRS)) &&
             !aout.getElement().isCompatible(Element.F32_4(mRS))) {
 
-            throw new RSIllegalArgumentException("Unsuported element type.");
+            throw new RSIllegalArgumentException("Unsupported element type.");
         }
 
         forEach(0, ain, aout, null, opt);
