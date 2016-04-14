@@ -1859,6 +1859,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mSettingsObserver = new SettingsObserver(mHandler);
         mSettingsObserver.observe();
         
+        mDeviceHardwareKeys = 0;
         mDeviceHardwareKeys = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_deviceHardwareKeys);
 
@@ -3345,7 +3346,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // dispatch
         // if keyguard is showing and secure, don't intercept and let aosp keycode
         // implementation handle event
-        if (mKeyHandler != null && !keyguardOn && !virtualKey) {
+
+	// Prema Chand Alugu (premaca@gmail.com)
+	// We will let the Hardware key binding handling to continue below, Skip
+	// this part here. If the device does not have the real hardware keys,
+	// lets keep this for backward compatibility, Ouch!
+        if ((mKeyHandler != null && !keyguardOn && !virtualKey) && 
+            (mDeviceHardwareKeys == 0)) {
             boolean handled = mKeyHandler.handleKeyEvent(win, keyCode, repeatCount, down, canceled,
                     longPress, keyguardOn);
             if (handled)
