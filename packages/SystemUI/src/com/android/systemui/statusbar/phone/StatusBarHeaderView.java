@@ -104,7 +104,6 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     private LinearLayout mSystemIcons;
     private View mSignalCluster;
     private SettingsButton mSettingsButton;
-    private View mTaskManagerButton;
     private View mSettingsContainer;
     private View mQsDetailHeader;
     private TextView mQsDetailHeaderTitle;
