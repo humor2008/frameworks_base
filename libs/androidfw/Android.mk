@@ -33,8 +33,7 @@ deviceSources := \
     $(commonSources) \
     BackupData.cpp \
     BackupHelpers.cpp \
-    CursorWindow.cpp \
-    DisplayEventDispatcher.cpp
+    CursorWindow.cpp
 
 hostSources := $(commonSources)
 
@@ -70,7 +69,6 @@ LOCAL_SHARED_LIBRARIES := \
     libbinder \
     liblog \
     libcutils \
-    libgui \
     libutils \
     libz
 
