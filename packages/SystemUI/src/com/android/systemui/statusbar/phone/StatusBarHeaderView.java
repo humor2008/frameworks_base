@@ -693,8 +693,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             startTaskManagerLongClickActivity();
         }
         return false;
-
-    }
+        }
 
     private void startSettingsActivity() {
         mActivityStarter.startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS),
@@ -902,7 +901,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         float batteryY;
         float batteryLevelAlpha;
         float batteryLevelExpandedAlpha;
-+       float taskManagerAlpha;
+        float taskManagerAlpha;
         float taskManagerTranslation;
         float settingsAlpha;
         float settingsTranslation;
