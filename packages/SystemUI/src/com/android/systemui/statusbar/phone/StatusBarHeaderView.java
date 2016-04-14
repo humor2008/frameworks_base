@@ -218,6 +218,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         mSettingsContainer = findViewById(R.id.settings_button_container);
         mTaskManagerButton = findViewById(R.id.task_manager_button);
         mSettingsButton.setOnClickListener(this);
+        mTaskManagerButton.setOnLongClickListener(this);
         mQsDetailHeader = findViewById(R.id.qs_detail_header);
         mQsDetailHeader.setAlpha(0);
         mQsDetailHeaderTitle = (TextView) mQsDetailHeader.findViewById(android.R.id.title);
@@ -688,6 +689,8 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             startClockLongClickActivity();
         } else if (v == mDateGroup) {
             startDateLongClickActivity();
+        } else if (v == mTaskManagerButton) {
+            startTaskManagerLongClickActivity();
         }
         return false;
 
@@ -731,6 +734,13 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     private void startDateLongClickActivity() {
         Intent intent = new Intent(Intent.ACTION_INSERT);
             intent.setData(Events.CONTENT_URI);
+        mActivityStarter.startActivity(intent, true /* dismissShade */);
+    }
+
+    private void startTaskManagerLongClickActivity() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setClassName("com.android.settings",
+            "com.android.settings.Settings$RunningServicesActivity");
         mActivityStarter.startActivity(intent, true /* dismissShade */);
     }
 
