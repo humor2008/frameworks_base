@@ -50,6 +50,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.view.animation.PathInterpolator;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.internal.logging.MetricsLogger;
@@ -233,6 +234,11 @@ public class NotificationPanelView extends PanelView implements
     private final Interpolator mTouchResponseInterpolator =
             new PathInterpolator(0.3f, 0f, 0.1f, 1f);
 
+    // Task manager
+    private boolean mShowTaskManager;
+    private boolean mTaskManagerShowing;
+    private LinearLayout mTaskManagerPanel;
+
     // QS alpha
     private int mQSShadeAlpha;
 
@@ -254,6 +260,7 @@ public class NotificationPanelView extends PanelView implements
         mKeyguardStatusView = (KeyguardStatusView) findViewById(R.id.keyguard_status_view);
         mQsContainer = (QSContainer) findViewById(R.id.quick_settings_container);
         mQsPanel = (QSPanel) findViewById(R.id.quick_settings_panel);
+        mTaskManagerPanel = (LinearLayout) findViewById(R.id.task_manager_panel);
         mClockView = (TextView) findViewById(R.id.clock_view);
         mScrollView = (ObservableScrollView) findViewById(R.id.scroll_view);
         mScrollView.setListener(this);
@@ -803,6 +810,7 @@ public class NotificationPanelView extends PanelView implements
         if (action == MotionEvent.ACTION_DOWN && isFullyCollapsed()
                 && mQsExpansionEnabled) {
             mTwoFingerQsExpandPossible = true;
+            mStatusBar.resetQsPanelVisibility();
         }
         if (mTwoFingerQsExpandPossible && isOpenQsEvent(event)
                 && event.getY(event.getActionIndex()) < mStatusBarMinHeight) {
@@ -1292,7 +1300,6 @@ public class NotificationPanelView extends PanelView implements
         mNotificationStackScroller.setScrollingEnabled(
                 mStatusBarState != StatusBarState.KEYGUARD && (!mQsExpanded
                         || mQsExpansionFromOverscroll));
-        mQsPanel.setVisibility(expandVisually ? View.VISIBLE : View.INVISIBLE);
         mQsContainer.setVisibility(
                 mKeyguardShowing && !expandVisually ? View.INVISIBLE : View.VISIBLE);
         mScrollView.setTouchEnabled(mQsExpanded);
@@ -1325,6 +1332,7 @@ public class NotificationPanelView extends PanelView implements
         updateNotificationScrim(height);
         if (mKeyguardShowing) {
             updateHeaderKeyguard();
+            mStatusBar.resetQsPanelVisibility();
         }
         if (mStatusBarState == StatusBarState.SHADE_LOCKED
                 || mStatusBarState == StatusBarState.KEYGUARD) {
@@ -1535,6 +1543,35 @@ public class NotificationPanelView extends PanelView implements
             return onHeader || (mScrollView.isScrolledToBottom() && yDiff < 0) && isInQsArea(x, y);
         } else {
             return onHeader || (showQsOverride && mStatusBarState == StatusBarState.SHADE);
+        }
+    }
+
+    void setTaskManagerEnabled(boolean enabled) {
+        mShowTaskManager = enabled;
+        // explicity restore visibility states when disabled
+        // and TaskManager last state was showing
+        if (!enabled && mTaskManagerShowing) {
+            mTaskManagerShowing = false;
+            mQsPanel.setVisibility(View.VISIBLE);
+            mTaskManagerPanel.setVisibility(View.GONE);
+        }
+    }
+
+    public void setTaskManagerVisibility(boolean taskManagerShowing) {
+        if (mShowTaskManager) {
+            mTaskManagerShowing = taskManagerShowing;
+            cancelAnimation();
+            boolean expandVisually = mQsExpanded || mStackScrollerOverscrolling;
+            mQsPanel.setVisibility(expandVisually && !taskManagerShowing
+                    ? View.VISIBLE : View.GONE);
+            mTaskManagerPanel.setVisibility(expandVisually && taskManagerShowing
+                    && !mKeyguardShowing ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private void cancelAnimation() {
+        if (mQsExpansionAnimator != null) {
+            mQsExpansionAnimator.cancel();
         }
     }
 
@@ -2521,6 +2558,8 @@ public class NotificationPanelView extends PanelView implements
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_TRANSPARENT_SHADE),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ENABLE_TASK_MANAGER), false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -2544,6 +2583,8 @@ public class NotificationPanelView extends PanelView implements
             mOneFingerQuickSettingsInterceptMode = Settings.System.getIntForUser(
                     resolver, Settings.System.STATUS_BAR_QUICK_QS_PULLDOWN,
                     ONE_FINGER_QS_INTERCEPT_END, UserHandle.USER_CURRENT);
+	    mShowTaskManager = Settings.System.getIntForUser(resolver,
+                    Settings.System.ENABLE_TASK_MANAGER, 0, UserHandle.USER_CURRENT) == 1;
             mQSShadeAlpha = Settings.System.getInt(
                     resolver, Settings.System.QS_TRANSPARENT_SHADE, 255);
             setQSBackgroundAlpha();

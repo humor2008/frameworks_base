@@ -35,6 +35,16 @@
     <!-- The color of the material notification background for media notifications when no custom
          color is specified -->
     <color name="notification_material_background_media_default_color">#000000</color>
+
+    <!-- Task Manager -->
+    <color name="memory_usage_item_background">#0000</color>
+    <color name="task_manager_title_text">#ffffffff</color>
+    <color name="memory_usage_text_text">#ff009688</color>
+    <color name="qs_panel_background">#0000</color>
+    <color name="task_item_view_background">#808080</color>
+    <color name="task_item_background">#0000</color>
+    <color name="task_item_text">#009688</color>
+
 </resources>
 
 
