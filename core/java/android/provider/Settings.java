@@ -3727,6 +3727,12 @@ public final class Settings {
          */
         public static final String SAFE_HEADSET_VOLUME = "safe_headset_volume";
 
+         /**
+         * Whether hardware keys are enabled
+         * @hide
+         */
+        public static final String DISABLE_HARDWARE_KEYS = "disable_hardware_keys";
+
         /**
          * Whether custom hardware key rebinding is enabled
          * @hide
