@@ -221,6 +221,7 @@ public class QsTuner extends Fragment implements Callback {
 	else if (spec.equals("kill_app")) return R.string.qs_kill_app;
         else if (spec.equals("navigation_bar")) return R.string.quick_settings_smartbar;
         else if (spec.equals("navigation_bar")) return R.string.quick_settings_navigation_bar;
+        else if (spec.equals("pulse")) return R.string.quick_settings_pulse_label;
         return 0;
     }
 
@@ -481,6 +482,7 @@ public class QsTuner extends Fragment implements Callback {
             else if (mSpec.equals("ime")) return R.drawable.ic_qs_ime;
  	    else if (mSpec.equals("kill_app")) return R.drawable.ic_app_kill;
             else if (mSpec.equals("navigation_bar")) return R.drawable.ic_qs_smartbar;
+	    else if (mSpec.equals("pulse")) return R.drawable.ic_qs_pulse;
             return R.drawable.android;
         }
 
