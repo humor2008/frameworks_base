@@ -4026,7 +4026,7 @@ public final class Settings {
          * @hide
          */
         public static final String PULSE_CUSTOM_DIV = "pulse_custom_div";
-        
+
         /**
          * Whether to show the ticker on the status bar
          * @hide
