@@ -3977,8 +3977,8 @@ public final class Settings {
          * @hide
          */
         public static final String STATUS_BAR_STATUS_ICONS_COLOR = "status_bar_status_icons_status_color";
-
-        /**
+                        
+	/**
          * Color of the status icons on the status bar, (dark mode)
          * @hide
          */
@@ -4014,6 +4014,24 @@ public final class Settings {
          * @hide
          */
         public static final int BLACKLIST_DO_NOT_BLOCK = 0;
+
+        /**
+         * Custom Pulse Widths
+         * @hide
+         */
+        public static final String PULSE_CUSTOM_DIMEN = "pulse_custom_dimen";
+
+        /**
+         * Custom Spacing Between Pulse Bars
+         * @hide
+         */
+        public static final String PULSE_CUSTOM_DIV = "pulse_custom_div";
+        
+        /**
+         * Whether to show the ticker on the status bar
+         * @hide
+         */
+        public static final String STATUS_BAR_NOTIFICATION_SHOW_TICKER = "status_bar_notification_show_ticker_color";
 
         /**
          * @hide
