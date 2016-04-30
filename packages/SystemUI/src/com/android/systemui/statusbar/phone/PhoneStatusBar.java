@@ -630,6 +630,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_CUSTOM_HEADER_SHADOW),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.PULSE_CUSTOM_DIMEN),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -703,6 +706,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                             updateSpeedbump();
                             updateClearAll();
                             updateEmptyShadeView();
+	    } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.PULSE_CUSTOM_DIMEN))) {
+		    mNavigationController.updateNavbarOverlay(getNavbarThemedResources());
 	    }
             update();
         }
