@@ -3727,6 +3727,18 @@ public final class Settings {
          */
         public static final String SAFE_HEADSET_VOLUME = "safe_headset_volume";
 
+	/**
+         * Navbar Button Color Switch
+         * @hide
+         */
+        public static final String NAVBAR_TINT_SWITCH = "navbar_tint_switch";
+        
+         /**
+         * Navbar Button Color
+         * @hide
+         */
+        public static final String NAVBAR_BUTTON_COLOR= "navbar_button_color";
+
          /**
          * Whether hardware keys are enabled
          * @hide
