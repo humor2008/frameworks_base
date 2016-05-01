@@ -4065,13 +4065,6 @@ public final class Settings {
          * @hide
          */
         public static final int BLACKLIST_MESSAGE_SHIFT = 4;
-
-        /**
-         * Custom Pulse Widths
-         * @hide
-         */
-        public static final String PULSE_CUSTOM_DIMEN = "pulse_custom_dimen";
-        
         /**
          * Whether the regex blacklisting feature for phone calls is enabled
          * @hide
