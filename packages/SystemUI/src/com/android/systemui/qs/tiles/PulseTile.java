@@ -61,7 +61,7 @@ public class PulseTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     public int getMetricsCategory() {
-        return MetricsLogger.OWLSNEST;
+        return MetricsLogger.THE_WOLF;
     }
 
 
