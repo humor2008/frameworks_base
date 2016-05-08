@@ -201,4 +201,6 @@
   <!-- HwKeys in WolvesDen -->
   <java-symbol type="bool" name="config_showHwKeys" />
 
+  <!--Exposed Java styles for power menu -->
+  <java-symbol type="style" name="Theme.Power.Dialog" />
 </resources>
