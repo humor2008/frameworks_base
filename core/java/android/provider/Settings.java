@@ -4611,7 +4611,6 @@ public final class Settings {
         public static final String LOCKSCREEN_CLOCK_DATE_COLOR = "lockscreen_clock_date_color";
 
         /**
-<<<<<<< HEAD
          * Style of Status bar logo
          * 0 - Left (default)
          * 1 - Right
