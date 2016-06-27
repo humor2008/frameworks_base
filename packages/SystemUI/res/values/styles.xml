@@ -371,7 +371,9 @@
      <style name="CropDialogAnimations">
           <item name="android:windowEnterAnimation">@anim/crop_in</item>
           <item name="android:windowExitAnimation">@anim/crop_out</item>
-      </style>
-    <style name="ScreenshotEditorStyle" parent="@android:style/Theme.Material" >
+     </style>
+
+     <style name="ScreenshotEditorStyle" parent="@android:style/Theme.Material" >
+     </style>
 
 </resources>
