@@ -34,4 +34,5 @@
     <color name="task_item_background">#0000</color>
     <color name="task_item_text">#ffffffff</color>
 
+    <color name="crop_action_overlay">#263238</color>
 </resources>
