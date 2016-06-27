@@ -282,6 +282,13 @@
                   android:process=":screenshot"
                   android:exported="false" />
 
+        <!-- Callback for editing screenshot notification -->
+        <activity android:name=".screenshot.GlobalScreenshot$EditScreenshotActivity"
+                  android:process=":screenshot"
+                  android:exported="false"
+                  android:taskAffinity=""
+                  android:excludeFromRecents="true" />
+
         <!-- Screenshot Activity -->
         <activity
             android:name="com.android.systemui.shortcuts.Screenshot"
@@ -471,9 +478,7 @@
 
         <service
             android:name=".screenshot.ScreenshotEditor"
-            android:theme="@style/ScreenshotEditorStyle"
-            android:enabled="true"
-            android:exported="true" />
+            android:theme="@style/ScreenshotEditorStyle" />
 
        <activity android:name=".DaylightHeaderDefault"
                 android:label="Default" >
