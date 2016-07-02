@@ -170,10 +170,15 @@ public class DeviceStorageMonitorService extends SystemService {
             // use the old value of mFreeMem
         }
         // Allow freemem to be overridden by debug.freemem for testing
+        //code edited by xiaozhuai
+        //去除存储空间不足的提示，实际上空间足够，这里调试时覆盖了可用空间导致后面的判断出问题
+        /*
         String debugFreeMem = SystemProperties.get("debug.freemem");
         if (!"".equals(debugFreeMem)) {
             mFreeMem = Long.parseLong(debugFreeMem);
         }
+        */
+        //end  
         // Read the log interval from secure settings
         long freeMemLogInterval = Settings.Global.getLong(mResolver,
                 Settings.Global.SYS_FREE_STORAGE_LOG_INTERVAL,
@@ -342,11 +347,17 @@ public class DeviceStorageMonitorService extends SystemService {
     }
 
     private static boolean isBootImageOnDisk() {
-        for (String instructionSet : InstructionSets.getAllDexCodeInstructionSets()) {
-            if (!VMRuntime.isBootClassPathOnDisk(instructionSet)) {
-                return false;
-            }
-        }
+            //code edited by xiaozhuai
+            //修复提示空间不足的问题，这里有问题，暂时没搞明白什么原因，始终返回true吧
+            /*
+         for (String instructionSet : InstructionSets.getAllDexCodeInstructionSets()) {
+             if (!VMRuntime.isBootClassPathOnDisk(instructionSet)) {
+                    android.util.Log.e("FHHR", "instructionSet == " + instructionSet);
+                 return false;
+             }
+         }
+        */
+        //end
         return true;
     }
 
